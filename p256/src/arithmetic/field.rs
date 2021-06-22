@@ -15,7 +15,7 @@ use elliptic_curve::{
 use elliptic_curve::zeroize::Zeroize;
 
 /// The number of 64-bit limbs used to represent a [`FieldElement`].
-const LIMBS: usize = 4;
+pub const LIMBS: usize = 4;
 
 /// Constant representing the modulus
 /// p = 2^{224}(2^{32} − 1) + 2^{192} + 2^{96} − 1
@@ -46,6 +46,7 @@ const R2: FieldElement = FieldElement([
 // The internal representation is in little-endian order. Elements are always in
 // Montgomery form; i.e., FieldElement(a) = aR mod p, with R = 2^256.
 #[derive(Clone, Copy, Debug)]
+#[repr(C)]
 pub struct FieldElement(pub(crate) [u64; LIMBS]);
 
 impl ConditionallySelectable for FieldElement {

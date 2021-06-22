@@ -9,23 +9,24 @@ use elliptic_curve::subtle::{Choice, ConditionallySelectable, ConstantTimeEq, Ct
 #[cfg(feature = "zeroize")]
 use elliptic_curve::zeroize::Zeroize;
 
-cfg_if! {
-    if #[cfg(any(target_pointer_width = "32", feature = "force-32-bit"))] {
-        use super::field_10x26::FieldElement10x26 as FieldElementUnsafeImpl;
-    } else if #[cfg(target_pointer_width = "64")] {
-        use super::field_5x52::FieldElement5x52 as FieldElementUnsafeImpl;
-    }
-}
+// cfg_if! {
+//     if #[cfg(any(target_pointer_width = "32", feature = "force-32-bit"))] {
+        use super::field_10x26::FieldElement10x26;
+//     } else if #[cfg(target_pointer_width = "64")] {
+//         use super::field_5x52::FieldElement5x52 as FieldElement10x26;
+//     }
+// }
 
 #[derive(Clone, Copy, Debug)]
+#[repr(C)]
 pub struct FieldElementImpl {
-    value: FieldElementUnsafeImpl,
+    value: FieldElement10x26,
     magnitude: u32,
     normalized: bool,
 }
 
 impl FieldElementImpl {
-    const fn new_normalized(value: &FieldElementUnsafeImpl) -> Self {
+    const fn new_normalized(value: &FieldElement10x26) -> Self {
         Self {
             value: *value,
             magnitude: 1,
@@ -33,7 +34,7 @@ impl FieldElementImpl {
         }
     }
 
-    const fn new_weak_normalized(value: &FieldElementUnsafeImpl) -> Self {
+    const fn new_weak_normalized(value: &FieldElement10x26) -> Self {
         Self {
             value: *value,
             magnitude: 1,
@@ -41,8 +42,8 @@ impl FieldElementImpl {
         }
     }
 
-    fn new(value: &FieldElementUnsafeImpl, magnitude: u32) -> Self {
-        debug_assert!(magnitude <= FieldElementUnsafeImpl::max_magnitude());
+    fn new(value: &FieldElement10x26, magnitude: u32) -> Self {
+        debug_assert!(magnitude <= FieldElement10x26::max_magnitude());
         Self {
             value: *value,
             magnitude,
@@ -51,21 +52,21 @@ impl FieldElementImpl {
     }
 
     pub const fn zero() -> Self {
-        Self::new_normalized(&FieldElementUnsafeImpl::zero())
+        Self::new_normalized(&FieldElement10x26::zero())
     }
 
     /// Returns the multiplicative identity.
     pub const fn one() -> Self {
-        Self::new_normalized(&FieldElementUnsafeImpl::one())
+        Self::new_normalized(&FieldElement10x26::one())
     }
 
     pub(crate) const fn from_bytes_unchecked(bytes: &[u8; 32]) -> Self {
-        let value = FieldElementUnsafeImpl::from_bytes_unchecked(bytes);
+        let value = FieldElement10x26::from_bytes_unchecked(bytes);
         Self::new_normalized(&value)
     }
 
     pub fn from_bytes(bytes: &FieldBytes) -> CtOption<Self> {
-        let value = FieldElementUnsafeImpl::from_bytes(bytes);
+        let value = FieldElement10x26::from_bytes(bytes);
         CtOption::map(value, |x| Self::new_normalized(&x))
     }
 
@@ -99,19 +100,19 @@ impl FieldElementImpl {
     pub fn negate(&self, magnitude: u32) -> Self {
         debug_assert!(self.magnitude <= magnitude);
         let new_magnitude = magnitude + 1;
-        debug_assert!(new_magnitude <= FieldElementUnsafeImpl::max_magnitude());
+        debug_assert!(new_magnitude <= FieldElement10x26::max_magnitude());
         Self::new(&(self.value.negate(magnitude)), new_magnitude)
     }
 
     pub fn add(&self, rhs: &Self) -> Self {
         let new_magnitude = self.magnitude + rhs.magnitude;
-        debug_assert!(new_magnitude <= FieldElementUnsafeImpl::max_magnitude());
+        debug_assert!(new_magnitude <= FieldElement10x26::max_magnitude());
         Self::new(&(self.value.add(&(rhs.value))), new_magnitude)
     }
 
     pub fn mul_single(&self, rhs: u32) -> Self {
         let new_magnitude = self.magnitude * rhs;
-        debug_assert!(new_magnitude <= FieldElementUnsafeImpl::max_magnitude());
+        debug_assert!(new_magnitude <= FieldElement10x26::max_magnitude());
         Self::new(&(self.value.mul_single(rhs)), new_magnitude)
     }
 
@@ -146,7 +147,7 @@ impl ConditionallySelectable for FieldElementImpl {
             a.normalized
         };
         Self {
-            value: FieldElementUnsafeImpl::conditional_select(&(a.value), &(b.value), choice),
+            value: FieldElement10x26::conditional_select(&(a.value), &(b.value), choice),
             magnitude: u32::conditional_select(&(a.magnitude), &(b.magnitude), choice),
             normalized: new_normalized,
         }

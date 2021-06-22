@@ -102,6 +102,7 @@ impl ScalarArithmetic for NistP256 {
 /// Please see the documentation for the relevant traits for more information.
 #[derive(Clone, Copy, Debug, Default)]
 #[cfg_attr(docsrs, doc(cfg(feature = "arithmetic")))]
+#[repr(C)]
 pub struct Scalar(pub(crate) U256);
 
 impl Field for Scalar {

@@ -138,6 +138,7 @@ fn muladd_fast(a: u64, b: u64, c0: u64, c1: u64) -> (u64, u64) {
 /// A scalar with arithmetic modulo curve order, represented as 4 64-bit limbs (little-endian).
 #[derive(Clone, Copy, Debug, Default)]
 #[cfg_attr(docsrs, doc(cfg(feature = "arithmetic")))]
+#[repr(C)]
 pub struct Scalar4x64([u64; 4]);
 
 impl Scalar4x64 {

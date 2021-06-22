@@ -22,6 +22,7 @@ impl AffineArithmetic for Secp256k1 {
 /// A point on the secp256k1 curve in affine coordinates.
 #[derive(Clone, Copy, Debug)]
 #[cfg_attr(docsrs, doc(cfg(feature = "arithmetic")))]
+#[repr(C)]
 pub struct AffinePoint {
     pub(crate) x: FieldElement,
     pub(crate) y: FieldElement,

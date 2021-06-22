@@ -13,6 +13,7 @@ use elliptic_curve::zeroize::Zeroize;
 /// ProjectiveArithmetic operations can be done without modulo reduction for some time,
 /// using the remaining overflow bits.
 #[derive(Clone, Copy, Debug)]
+#[repr(C)]
 pub struct FieldElement10x26(pub(crate) [u32; 10]);
 
 impl FieldElement10x26 {

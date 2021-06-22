@@ -125,20 +125,25 @@ pub type CompressedPoint = GenericArray<u8, U33>;
 /// secp256k1 (K-256) field element serialized as bytes.
 ///
 /// Byte array containing a serialized field element value (base field or scalar).
+/// cbindgen:ignore
 pub type FieldBytes = elliptic_curve::FieldBytes<Secp256k1>;
 
 /// SEC1-encoded secp256k1 (K-256) curve point.
+/// cbindgen:ignore
 pub type EncodedPoint = elliptic_curve::sec1::EncodedPoint<Secp256k1>;
 
 /// Non-zero secp256k1 (K-256) scalar field element.
+/// cbindgen:ignore
 #[cfg(feature = "arithmetic")]
 pub type NonZeroScalar = elliptic_curve::NonZeroScalar<Secp256k1>;
 
 /// secp256k1 (K-256) public key.
+/// cbindgen:ignore
 #[cfg(feature = "arithmetic")]
 pub type PublicKey = elliptic_curve::PublicKey<Secp256k1>;
 
 /// secp256k1 (K-256) secret key.
+/// cbindgen:ignore
 #[cfg(feature = "zeroize")]
 #[cfg_attr(docsrs, doc(cfg(feature = "zeroize")))]
 pub type SecretKey = elliptic_curve::SecretKey<Secp256k1>;
@@ -147,10 +152,12 @@ pub type SecretKey = elliptic_curve::SecretKey<Secp256k1>;
 impl elliptic_curve::sec1::ValidatePublicKey for Secp256k1 {}
 
 /// Bit representation of a K-256 scalar field element.
+/// cbindgen:ignore
 #[cfg(feature = "bits")]
 #[cfg_attr(docsrs, doc(cfg(feature = "bits")))]
 pub type ScalarBits = elliptic_curve::ScalarBits<Secp256k1>;
 
 /// Scalar bytes: wrapper for [`FieldBytes`] which guarantees that the the
 /// inner byte value is within range of the [`Curve::ORDER`].
+/// cbindgen:ignore
 pub type ScalarBytes = elliptic_curve::ScalarBytes<Secp256k1>;

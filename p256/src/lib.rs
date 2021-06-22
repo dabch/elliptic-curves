@@ -73,6 +73,9 @@ pub use arithmetic::{
     scalar::{blinding::BlindedScalar, Scalar},
 };
 
+#[cfg(feature = "arithmetic")]
+pub use arithmetic::LIMBS;
+
 #[cfg(feature = "pkcs8")]
 #[cfg_attr(docsrs, doc(cfg(feature = "pkcs8")))]
 pub use elliptic_curve::pkcs8;
@@ -134,20 +137,25 @@ pub type CompressedPoint = GenericArray<u8, U33>;
 /// NIST P-256 field element serialized as bytes.
 ///
 /// Byte array containing a serialized field element value (base field or scalar).
+/// cbindgen:ignore
 pub type FieldBytes = elliptic_curve::FieldBytes<NistP256>;
 
 /// NIST P-256 SEC1 encoded point.
+/// cbindgen:ignore
 pub type EncodedPoint = elliptic_curve::sec1::EncodedPoint<NistP256>;
 
 /// Non-zero NIST P-256 scalar field element.
+/// cbindgen:ignore
 #[cfg(feature = "arithmetic")]
 pub type NonZeroScalar = elliptic_curve::NonZeroScalar<NistP256>;
 
 /// NIST P-256 public key.
+/// cbindgen:ignore
 #[cfg(feature = "arithmetic")]
 pub type PublicKey = elliptic_curve::PublicKey<NistP256>;
 
 /// NIST P-256 secret key.
+/// cbindgen:ignore
 #[cfg(feature = "zeroize")]
 #[cfg_attr(docsrs, doc(cfg(feature = "zeroize")))]
 pub type SecretKey = elliptic_curve::SecretKey<NistP256>;
@@ -156,10 +164,12 @@ pub type SecretKey = elliptic_curve::SecretKey<NistP256>;
 impl elliptic_curve::sec1::ValidatePublicKey for NistP256 {}
 
 /// Bit representation of a NIST P-256 scalar field element.
+/// cbindgen:ignore
 #[cfg(feature = "bits")]
 #[cfg_attr(docsrs, doc(cfg(feature = "bits")))]
 pub type ScalarBits = elliptic_curve::ScalarBits<NistP256>;
 
 /// Scalar bytes: wrapper for [`FieldBytes`] which guarantees that the the
 /// inner byte value is within range of the [`Curve::ORDER`].
+/// cbindgen:ignore
 pub type ScalarBytes = elliptic_curve::ScalarBytes<NistP256>;

@@ -89,9 +89,11 @@ use crate::NonZeroScalar;
 use elliptic_curve::generic_array::GenericArray;
 
 /// ECDSA/secp256k1 signature (fixed-size)
+/// cbindgen:ignore
 pub type Signature = ecdsa_core::Signature<Secp256k1>;
 
 /// ECDSA/secp256k1 signature (ASN.1 DER encoded)
+/// cbindgen:ignore
 pub type DerSignature = ecdsa_core::der::Signature<Secp256k1>;
 
 #[cfg(feature = "sha256")]

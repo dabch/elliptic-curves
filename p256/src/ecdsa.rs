@@ -52,17 +52,21 @@ use {
 };
 
 /// ECDSA/P-256 signature (fixed-size)
+/// cbindgen:ignore
 pub type Signature = ecdsa_core::Signature<NistP256>;
 
 /// ECDSA/P-256 signature (ASN.1 DER encoded)
+/// cbindgen:ignore
 pub type DerSignature = ecdsa_core::der::Signature<NistP256>;
 
 /// ECDSA/P-256 signing key
+/// cbindgen:ignore
 #[cfg(feature = "ecdsa")]
 #[cfg_attr(docsrs, doc(cfg(feature = "ecdsa")))]
 pub type SigningKey = ecdsa_core::SigningKey<NistP256>;
 
 /// ECDSA/P-256 verification key (i.e. public key)
+/// cbindgen:ignore
 #[cfg(feature = "ecdsa")]
 #[cfg_attr(docsrs, doc(cfg(feature = "ecdsa")))]
 pub type VerifyingKey = ecdsa_core::VerifyingKey<NistP256>;

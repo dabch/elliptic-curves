@@ -6,6 +6,8 @@ pub(crate) mod projective;
 pub(crate) mod scalar;
 pub(crate) mod util;
 
+pub use field::LIMBS;
+
 use affine::AffinePoint;
 use field::{FieldElement, MODULUS};
 use projective::ProjectivePoint;

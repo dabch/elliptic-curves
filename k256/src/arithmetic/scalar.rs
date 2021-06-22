@@ -2,23 +2,23 @@
 
 use cfg_if::cfg_if;
 
-cfg_if! {
-    if #[cfg(any(target_pointer_width = "32", feature = "force-32-bit"))] {
+// cfg_if! {
+//     if #[cfg(any(target_pointer_width = "32", feature = "force-32-bit"))] {
         mod scalar_8x32;
-        use scalar_8x32::Scalar8x32 as ScalarImpl;
-        use scalar_8x32::WideScalar16x32 as WideScalarImpl;
+        use scalar_8x32::Scalar8x32;
+        use scalar_8x32::WideScalar16x32;
 
-        #[cfg(feature = "bits")]
-        use scalar_8x32::MODULUS;
-    } else if #[cfg(target_pointer_width = "64")] {
-        mod scalar_4x64;
-        use scalar_4x64::Scalar4x64 as ScalarImpl;
-        use scalar_4x64::WideScalar8x64 as WideScalarImpl;
+//         #[cfg(feature = "bits")]
+//         use scalar_8x32::MODULUS;
+//     } else if #[cfg(target_pointer_width = "64")] {
+//         mod scalar_4x64;
+//         use scalar_4x64::Scalar4x64 as Scalar8x32;
+//         use scalar_4x64::WideScalar8x64 as WideScalar16x32;
 
-        #[cfg(feature = "bits")]
-        use scalar_4x64::MODULUS;
-    }
-}
+//         #[cfg(feature = "bits")]
+//         use scalar_4x64::MODULUS;
+//     }
+// }
 
 use crate::{FieldBytes, Secp256k1};
 use core::ops::{Add, AddAssign, Mul, MulAssign, Neg, Shr, Sub, SubAssign};
@@ -71,7 +71,8 @@ impl ScalarArithmetic for Secp256k1 {
 /// Please see the documentation for the relevant traits for more information.
 #[derive(Clone, Copy, Debug, Default)]
 #[cfg_attr(docsrs, doc(cfg(feature = "arithmetic")))]
-pub struct Scalar(ScalarImpl);
+#[repr(C)]
+pub struct Scalar(Scalar8x32);
 
 impl Field for Scalar {
     fn random(rng: impl RngCore) -> Self {
@@ -131,7 +132,7 @@ impl PrimeField for Scalar {
     /// Returns None if the byte array does not contain a big-endian integer in the range
     /// [0, p).
     fn from_repr(bytes: FieldBytes) -> Option<Self> {
-        ScalarImpl::from_bytes(bytes.as_ref()).map(Self).into()
+        Scalar8x32::from_bytes(bytes.as_ref()).map(Self).into()
     }
 
     fn to_repr(&self) -> FieldBytes {
@@ -178,25 +179,25 @@ impl PrimeFieldBits for Scalar {
 
 impl From<u32> for Scalar {
     fn from(k: u32) -> Self {
-        Self(ScalarImpl::from(k))
+        Self(Scalar8x32::from(k))
     }
 }
 
 impl From<u64> for Scalar {
     fn from(k: u64) -> Self {
-        Self(ScalarImpl::from(k))
+        Self(Scalar8x32::from(k))
     }
 }
 
 impl Scalar {
     /// Returns the zero scalar.
     pub const fn zero() -> Self {
-        Self(ScalarImpl::zero())
+        Self(Scalar8x32::zero())
     }
 
     /// Returns the multiplicative identity.
     pub const fn one() -> Scalar {
-        Self(ScalarImpl::one())
+        Self(Scalar8x32::one())
     }
 
     /// Checks if the scalar is zero.
@@ -212,14 +213,14 @@ impl Scalar {
     /// Attempts to parse the given byte array as a scalar.
     /// Does not check the result for being in the correct range.
     pub(crate) const fn from_bytes_unchecked(bytes: &[u8; 32]) -> Self {
-        Self(ScalarImpl::from_bytes_unchecked(bytes))
+        Self(Scalar8x32::from_bytes_unchecked(bytes))
     }
 
     /// Parses the given byte array as a scalar.
     ///
     /// Subtracts the modulus when the byte array is larger than the modulus.
     pub fn from_bytes_reduced(bytes: &FieldBytes) -> Self {
-        Self(ScalarImpl::from_bytes_reduced(bytes.as_ref()))
+        Self(Scalar8x32::from_bytes_reduced(bytes.as_ref()))
     }
 
     /// Returns the SEC1 encoding of this scalar.
@@ -335,7 +336,7 @@ impl Scalar {
         // negligible bias from the uniform distribution, but the process is constant-time.
         let mut buf = [0u8; 64];
         rng.fill_bytes(&mut buf);
-        Scalar(WideScalarImpl::from_bytes(&buf).reduce())
+        Scalar(WideScalar16x32::from_bytes(&buf).reduce())
     }
 
     /// Returns a uniformly-random scalar, generated using rejection sampling.
@@ -396,7 +397,7 @@ impl Shr<usize> for &Scalar {
 
 impl ConditionallySelectable for Scalar {
     fn conditional_select(a: &Self, b: &Self, choice: Choice) -> Self {
-        Self(ScalarImpl::conditional_select(&(a.0), &(b.0), choice))
+        Self(Scalar8x32::conditional_select(&(a.0), &(b.0), choice))
     }
 }
 

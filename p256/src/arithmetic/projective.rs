@@ -25,6 +25,7 @@ impl ProjectiveArithmetic for NistP256 {
 /// A point on the secp256r1 curve in projective coordinates.
 #[derive(Clone, Copy, Debug)]
 #[cfg_attr(docsrs, doc(cfg(feature = "arithmetic")))]
+#[repr(C)]
 pub struct ProjectivePoint {
     x: FieldElement,
     y: FieldElement,

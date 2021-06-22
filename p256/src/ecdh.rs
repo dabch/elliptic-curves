@@ -39,9 +39,11 @@
 use crate::{AffinePoint, NistP256};
 
 /// NIST P-256 Ephemeral Diffie-Hellman Secret.
+/// cbindgen:ignore
 pub type EphemeralSecret = elliptic_curve::ecdh::EphemeralSecret<NistP256>;
 
 /// Shared secret value computed via ECDH key agreement.
+/// cbindgen:ignore
 pub type SharedSecret = elliptic_curve::ecdh::SharedSecret<NistP256>;
 
 impl From<&AffinePoint> for SharedSecret {

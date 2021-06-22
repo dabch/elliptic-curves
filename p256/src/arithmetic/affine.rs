@@ -22,6 +22,7 @@ impl AffineArithmetic for NistP256 {
 /// A point on the secp256r1 curve in affine coordinates.
 #[derive(Clone, Copy, Debug)]
 #[cfg_attr(docsrs, doc(cfg(feature = "arithmetic")))]
+#[repr(C)]
 pub struct AffinePoint {
     pub(crate) x: FieldElement,
     pub(crate) y: FieldElement,
