@@ -1,5 +1,7 @@
 # RustCrypto: Elliptic Curves ![Rust Version][rustc-image] [![Project Chat][chat-image]][chat-link] [![dependency status][deps-image]][deps-link]
 
+**Warning**: This crate was unprofessionally modified to work with cbindgen for embedded systems, which breaks compilation on non-32bit targets!
+
 General purpose Elliptic Curve Cryptography (ECC) support, including types
 and traits for representing various elliptic curve forms, scalars, points,
 and public/secret keys composed thereof.
