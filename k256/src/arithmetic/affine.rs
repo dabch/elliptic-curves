@@ -12,6 +12,8 @@ use elliptic_curve::{
     AffineArithmetic,
 };
 
+use serde::{Serialize, Deserialize};
+
 #[cfg(feature = "zeroize")]
 use elliptic_curve::zeroize::Zeroize;
 
@@ -20,7 +22,7 @@ impl AffineArithmetic for Secp256k1 {
 }
 
 /// A point on the secp256k1 curve in affine coordinates.
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
 #[cfg_attr(docsrs, doc(cfg(feature = "arithmetic")))]
 #[repr(C)]
 pub struct AffinePoint {

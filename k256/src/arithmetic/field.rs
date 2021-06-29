@@ -1,6 +1,7 @@
 //! Field arithmetic modulo p = 2^256 - 2^32 - 2^9 - 2^8 - 2^7 - 2^6 - 2^4 - 1
 
 // use cfg_if::cfg_if;
+use serde::{Serialize, Deserialize};
 
 // cfg_if! {
 //     if #[cfg(feature = "field-montgomery")] {
@@ -40,7 +41,7 @@ use elliptic_curve::zeroize::Zeroize;
 use num_bigint::{BigUint, ToBigUint};
 
 /// An element in the finite field used for curve coordinates.
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
 #[repr(C)]
 pub struct FieldElement(FieldElement10x26);
 

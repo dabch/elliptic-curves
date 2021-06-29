@@ -42,6 +42,8 @@ use elliptic_curve::zeroize::Zeroize;
 #[cfg(test)]
 use num_bigint::{BigUint, ToBigUint};
 
+use serde::{Serialize, Deserialize};
+
 impl ScalarArithmetic for Secp256k1 {
     type Scalar = Scalar;
 }
@@ -69,7 +71,7 @@ impl ScalarArithmetic for Secp256k1 {
 ///   operations over field elements represented as bits (requires `bits` feature)
 ///
 /// Please see the documentation for the relevant traits for more information.
-#[derive(Clone, Copy, Debug, Default)]
+#[derive(Clone, Copy, Debug, Default, Serialize, Deserialize)]
 #[cfg_attr(docsrs, doc(cfg(feature = "arithmetic")))]
 #[repr(C)]
 pub struct Scalar(Scalar8x32);

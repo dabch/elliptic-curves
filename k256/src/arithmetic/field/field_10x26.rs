@@ -7,12 +7,14 @@ use elliptic_curve::subtle::{Choice, ConditionallySelectable, ConstantTimeEq, Ct
 #[cfg(feature = "zeroize")]
 use elliptic_curve::zeroize::Zeroize;
 
+use serde::{Serialize, Deserialize};
+
 /// Scalars modulo SECP256k1 modulus (2^256 - 2^32 - 2^9 - 2^8 - 2^7 - 2^6 - 2^4 - 1).
 /// Uses 10 32-bit limbs (little-endian), where in the normalized form
 /// first 9 contain 26 bits of the value each, and the last one contains 22 bits.
 /// ProjectiveArithmetic operations can be done without modulo reduction for some time,
 /// using the remaining overflow bits.
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
 #[repr(C)]
 pub struct FieldElement10x26(pub(crate) [u32; 10]);
 

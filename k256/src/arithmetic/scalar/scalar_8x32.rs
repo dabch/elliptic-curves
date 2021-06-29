@@ -11,6 +11,8 @@ use elliptic_curve::subtle::{Choice, ConditionallySelectable, ConstantTimeEq, Ct
 #[cfg(feature = "zeroize")]
 use elliptic_curve::zeroize::Zeroize;
 
+use serde::{Serialize, Deserialize};
+
 /// Constant representing the modulus
 /// n = FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFE BAAEDCE6 AF48A03B BFD25E8C D0364141
 // TODO(tarcieri): use `Secp256k1::ORDER.into_limbs()`
@@ -168,7 +170,7 @@ fn muladd_fast(a: u32, b: u32, c0: u32, c1: u32) -> (u32, u32) {
 }
 
 /// A scalar with arithmetic modulo curve order, represented as 8 32-bit limbs (little-endian).
-#[derive(Clone, Copy, Debug, Default)]
+#[derive(Clone, Copy, Debug, Default, Serialize, Deserialize)]
 #[cfg_attr(docsrs, doc(cfg(feature = "arithmetic")))]
 #[repr(C)]
 pub struct Scalar8x32([u32; 8]);
